@@ -1,0 +1,5 @@
+.idea
+manage.py
+recipe_generator/__pycache__
+db.sqlite3
+.env
