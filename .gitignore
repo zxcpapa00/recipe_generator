@@ -3,3 +3,6 @@ manage.py
 recipe_generator/__pycache__
 db.sqlite3
 .env
+templates
+service/migrations
+service/__pycache__
