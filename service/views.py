@@ -20,8 +20,7 @@ def find_recipe(request):
         for data in response_data:
             image = data['image']
             all_ingredients = [i["originalName"] for i in data["missedIngredients"]] + [i["originalName"] for i in
-                                                                                        data["usedIngredients"]] + [
-                                  i["originalName"] for i in data["unusedIngredients"]]
+                                                                                        data["usedIngredients"]]
             translated_ingredients = translate(all_ingredients, "ru")
             ingredients = [ing['text'].title() for ing in translated_ingredients["translations"]]
             result_data.append({
