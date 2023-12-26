@@ -2,35 +2,7 @@ import requests
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
-
-
-def index(request):
-    return render(request, 'base.html')
-
-
-def find_recipe(request):
-    if request.method == 'POST':
-        added_products_str = request.POST.get('added-products', '')
-        added_products = [product.strip() for product in added_products_str.split(',') if product]
-        translated_to_en = translate(added_products, 'en')
-        products = [i['text'] for i in translated_to_en["translations"]]
-        response_data = request_api_spoonacular(products)
-
-        result_data = []
-        for data in response_data:
-            image = data['image']
-            all_ingredients = [i["originalName"] for i in data["missedIngredients"]] + [i["originalName"] for i in
-                                                                                        data["usedIngredients"]]
-            translated_ingredients = translate(all_ingredients, "ru")
-            ingredients = [ing['text'].title() for ing in translated_ingredients["translations"]]
-            result_data.append({
-                "image": image,
-                "ingredients": ingredients,
-            })
-
-        return render(request, 'base.html', context={'recipe': result_data})
-
-    return render(request, 'base.html')
+from django.views.generic import TemplateView, CreateView
 
 
 def request_api_spoonacular(products):
@@ -73,3 +45,37 @@ def translate(texts, lang):
                              )
 
     return response.json()
+
+
+class IndexView(TemplateView):
+    template_name = 'base.html'
+
+
+class FindRecipeView(CreateView):
+    template_name = 'base.html'
+
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            added_products_str = request.POST.get('added-products', '')
+            added_products = [product.strip() for product in added_products_str.split(',') if product]
+            translated_to_en = translate(added_products, 'en')
+            products = [i['text'] for i in translated_to_en["translations"]]
+            response_data = request_api_spoonacular(products)
+
+            result_data = []
+            for data in response_data:
+                title = translate(data['title'], 'ru')
+                image = data['image']
+                all_ingredients = [i["originalName"] for i in data["missedIngredients"]] + [i["originalName"] for i in
+                                                                                            data["usedIngredients"]]
+                translated_ingredients = translate(all_ingredients, "ru")
+                ingredients = [ing['text'].title() for ing in translated_ingredients["translations"]]
+                result_data.append({
+                    "title": title['translations'][0]['text'],
+                    "image": image,
+                    "ingredients": ingredients,
+                })
+
+            return render(request, 'base.html', context={'recipe': result_data})
+
+        return render(request, 'base.html')
