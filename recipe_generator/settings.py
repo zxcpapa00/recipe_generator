@@ -117,8 +117,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# API
+SPOONACULAR_KEY = os.environ.get("SPOONACULAR_KEY")
+YANDEX_IAM_TOKEN = os.environ.get('YANDEX_IAM_TOKEN')
+YANDEX_FOLDER_ID = os.environ.get('YANDEX_FOLDER_ID')

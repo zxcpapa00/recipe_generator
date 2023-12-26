@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from service.views import index, find_recipe
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', index),
+    path('find_recipe/', find_recipe, name="find_recipe"),
 ]
