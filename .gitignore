@@ -6,3 +6,6 @@ db.sqlite3
 templates
 service/migrations
 service/__pycache__
+
+accounts/migrations
+accounts/__pycache__
